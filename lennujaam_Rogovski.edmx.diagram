@@ -5,9 +5,9 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="1413fc757b7a4b3db03a48fb9e8955cc" Name="Diagram1" >
-        <EntityTypeShape EntityType="lennujaam_Rogovski.lend" Width="1.5" PointX="5.75" PointY="2.375" />
-        <EntityTypeShape EntityType="lennujaam_Rogovski.lennuk" Width="1.5" PointX="3.375" PointY="2.25" />
-        <EntityTypeShape EntityType="lennujaam_Rogovski.kasutaja" Width="1.5" PointX="9" PointY="2.5" />
+        <EntityTypeShape EntityType="lennujaam_Rogovski.lend" Width="1.5" PointX="5.875" PointY="2.375" />
+        <EntityTypeShape EntityType="lennujaam_Rogovski.lennuk" Width="1.5" PointX="3.5" PointY="2.625" />
+        <AssociationConnector Association="lennujaam_Rogovski.lennuklend" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

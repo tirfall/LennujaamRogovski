@@ -4,18 +4,58 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl" Namespace="lennujaam_Rogovski.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005">
-        <EntityContainer Name="lennujaam_RogovskiTargetContainer" >
-        </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+    <Schema Namespace="lennujaam_Rogovski.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="lennujaam_RogovskiStoreContainer">
+    <EntitySet Name="lendSet" EntityType="lennujaam_Rogovski.Store.lendSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="lennukSet" EntityType="lennujaam_Rogovski.Store.lennukSet" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="lennuklend" Association="lennujaam_Rogovski.Store.lennuklend">
+      <End Role="lennuk" EntitySet="lennukSet" />
+      <End Role="lend" EntitySet="lendSet" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="lendSet">
+    <Key>
+      <PropertyRef Name="lendId" />
+    </Key>
+    <Property Name="lendId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="lennunumber" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="reisijatearv" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="valjumisaeg" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="valjumiskoht" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="sihtkoht" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="lennuk_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="lennukSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="kohtadearv" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="mudel" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <Association Name="lennuklend">
+    <End Role="lennuk" Type="lennujaam_Rogovski.Store.lennukSet" Multiplicity="1" />
+    <End Role="lend" Type="lennujaam_Rogovski.Store.lendSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="lennuk">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="lend">
+        <PropertyRef Name="lennuk_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="lennujaam_Rogovski" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
         <EntityContainer Name="lennujaam_RogovskiContainer" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="lendSet" EntityType="lennujaam_Rogovski.lend" />
           <EntitySet Name="lennukSet" EntityType="lennujaam_Rogovski.lennuk" />
-          <EntitySet Name="kasutajaSet" EntityType="lennujaam_Rogovski.kasutaja" />
+          <AssociationSet Name="lennuklend" Association="lennujaam_Rogovski.lennuklend">
+            <End Role="lennuk" EntitySet="lennukSet" />
+            <End Role="lend" EntitySet="lendSet" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="lend">
           <Key>
@@ -27,31 +67,58 @@
           <Property Name="valjumisaeg" Type="String" Nullable="false" />
           <Property Name="valjumiskoht" Type="String" Nullable="false" />
           <Property Name="sihtkoht" Type="String" Nullable="false" />
-          <NavigationProperty Name="lennuk" />
+          <NavigationProperty Name="lennuk" Relationship="lennujaam_Rogovski.lennuklend" FromRole="lend" ToRole="lennuk" />
         </EntityType>
         <EntityType Name="lennuk">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="kohtadearv" Type="String" Nullable="false" />
+          <Property Name="mudel" Type="String" Nullable="false" />
+          <NavigationProperty Name="lend" Relationship="lennujaam_Rogovski.lennuklend" FromRole="lennuk" ToRole="lend" />
         </EntityType>
-        <EntityType Name="kasutaja">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-        </EntityType>
+        <Association Name="lennuklend">
+          <End Type="lennujaam_Rogovski.lennuk" Role="lennuk" Multiplicity="1" />
+          <End Type="lennujaam_Rogovski.lend" Role="lend" Multiplicity="*" />
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-      <Mapping xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs" Space="C-S">
-        <Alias Key="Model" Value="lennujaam_Rogovski" />
-        <Alias Key="Target" Value="lennujaam_Rogovski.Store" />
-        <EntityContainerMapping CdmEntityContainer="lennujaam_RogovskiContainer" StorageEntityContainer="lennujaam_RogovskiTargetContainer">
-        </EntityContainerMapping>
-      </Mapping>
-    </edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="lennujaam_RogovskiStoreContainer" CdmEntityContainer="lennujaam_RogovskiContainer">
+    <EntitySetMapping Name="lendSet">
+      <EntityTypeMapping TypeName="IsTypeOf(lennujaam_Rogovski.lend)">
+        <MappingFragment StoreEntitySet="lendSet">
+          <ScalarProperty Name="lendId" ColumnName="lendId" />
+          <ScalarProperty Name="lennunumber" ColumnName="lennunumber" />
+          <ScalarProperty Name="reisijatearv" ColumnName="reisijatearv" />
+          <ScalarProperty Name="valjumisaeg" ColumnName="valjumisaeg" />
+          <ScalarProperty Name="valjumiskoht" ColumnName="valjumiskoht" />
+          <ScalarProperty Name="sihtkoht" ColumnName="sihtkoht" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="lennukSet">
+      <EntityTypeMapping TypeName="IsTypeOf(lennujaam_Rogovski.lennuk)">
+        <MappingFragment StoreEntitySet="lennukSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="kohtadearv" ColumnName="kohtadearv" />
+          <ScalarProperty Name="mudel" ColumnName="mudel" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="lennuklend" TypeName="lennujaam_Rogovski.lennuklend" StoreEntitySet="lendSet">
+      <EndProperty Name="lennuk">
+        <ScalarProperty Name="Id" ColumnName="lennuk_Id" />
+      </EndProperty>
+      <EndProperty Name="lend">
+        <ScalarProperty Name="lendId" ColumnName="lendId" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
@@ -65,6 +132,7 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="False" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
       </DesignerInfoPropertySet>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
