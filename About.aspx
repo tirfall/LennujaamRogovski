@@ -5,7 +5,7 @@
         <h2 id="title"><%: Title %>.</h2>
         <h3>Lend ja lennuk tabel</h3>
         <p>
-            <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataKeyNames="lendId" DataSourceID="SqlDataSource1" EmptyDataText="There are no data records to display.">
+            <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataKeyNames="lendId" DataSourceID="SqlDataSource1" EmptyDataText="There are no data records to display." AllowSorting="True">
                 <Columns>
                     <asp:BoundField DataField="lendId" HeaderText="lendId" InsertVisible="False" ReadOnly="True" SortExpression="lendId" />
                     <asp:BoundField DataField="lennunumber" HeaderText="lennunumber" SortExpression="lennunumber" />
